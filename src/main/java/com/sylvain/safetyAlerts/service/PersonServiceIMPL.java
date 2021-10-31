@@ -1,6 +1,9 @@
 package com.sylvain.safetyAlerts.service;
 
 import com.sylvain.safetyAlerts.dto.ChildAlertDTO;
+import com.sylvain.safetyAlerts.dto.FireDTO;
+import com.sylvain.safetyAlerts.dto.PersonInfoDTO;
+import com.sylvain.safetyAlerts.models.FireStation;
 import com.sylvain.safetyAlerts.models.MedicalRecord;
 import com.sylvain.safetyAlerts.models.Person;
 import com.sylvain.safetyAlerts.repository.DataRepository;
@@ -51,6 +54,49 @@ public class PersonServiceIMPL implements IPersonService {
             }
         }
         return childAlertDTOs;
+    }
+
+    @Override
+    public List<PersonInfoDTO> getPersonInfo(String firstName, String lastName) {
+        List<PersonInfoDTO> personInfoDTOs = new ArrayList<PersonInfoDTO>();
+        List<Person> persons = dataRepository.getPersonByLastNameAndFirsName(lastName, firstName);
+        for (Person person :persons) {
+            MedicalRecord medicalRecord = dataRepository.getMedicalRecordByFirstNameAndLastName(person.getFirstName(), person.getLastName());
+            int age = CalculateAge.getAge(medicalRecord.getBirthdate());
+            PersonInfoDTO personInfoDTO = new PersonInfoDTO();
+            personInfoDTO.setFirstName(person.getFirstName());
+            personInfoDTO.setLastName(person.getLastName());
+            personInfoDTO.setAddress(person.getAddress());
+            personInfoDTO.setAge(age);
+            personInfoDTO.setEmail(person.getEmail());
+            personInfoDTO.setAllergies(medicalRecord.getAllergies());
+            personInfoDTO.setMedications(medicalRecord.getMedications());
+            personInfoDTOs.add(personInfoDTO);
+        }
+
+        return personInfoDTOs;
+    }
+
+    @Override
+    public List<FireDTO> getPersonByAddress(String address) {
+        List<FireDTO> fireDTOs = new ArrayList<FireDTO>();
+        List<Person> persons = dataRepository.getPersonByAddress(address);
+        for (Person person :persons) {
+            MedicalRecord medicalRecord = dataRepository.getMedicalRecordByFirstNameAndLastName(person.getFirstName(), person.getLastName());
+            FireStation firestation = dataRepository.getStationByAddress(person.getAddress());
+            int age = CalculateAge.getAge(medicalRecord.getBirthdate());
+            FireDTO fireDTO = new FireDTO();
+            fireDTO.setFirstName(person.getFirstName());
+            fireDTO.setLastName(person.getLastName());
+            fireDTO.setPhone(person.getPhone());
+            fireDTO.setAge(age);
+            fireDTO.setMedications(medicalRecord.getMedications());
+            fireDTO.setAllergies(medicalRecord.getAllergies());
+            fireDTO.setStation(firestation.getStation());
+            fireDTOs.add(fireDTO);
+        }
+
+        return fireDTOs;
     }
 
     @Override
