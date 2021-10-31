@@ -1,5 +1,6 @@
 package com.sylvain.safetyAlerts.controller;
 
+import com.sylvain.safetyAlerts.dto.ChildAlertDTO;
 import com.sylvain.safetyAlerts.service.IPersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +18,11 @@ public class URLController {
     @GetMapping("communityEmail")
     public List<String> getCommunityEmail(@RequestParam String city){
         return personService.getCommunityEmail(city);
+    }
+
+    @GetMapping("childAlert")
+    public List<ChildAlertDTO> getChildAlert(@RequestParam String address){
+        return personService.getChildAlert(address);
     }
 
 }

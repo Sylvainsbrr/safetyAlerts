@@ -111,6 +111,71 @@ public class DataRepository {
         return database.getPersons().stream().filter(person -> person.getCity().equalsIgnoreCase(city)).collect(Collectors.toList());
     }
 
+    public List<Person> getPersonByAddress(String address) {
+        return database.getPersons().stream().filter(person -> person.getAddress().equalsIgnoreCase(address))
+                .collect(Collectors.toList());
+    }
+
+    public List<Person> getFamilyMemberByLastName(String lastName) {
+        return database.getPersons().stream().filter(person -> person.getLastName().equalsIgnoreCase(lastName))
+                .collect(Collectors.toList());
+    }
+
+    public List<Person> getPersonByLastNameAndFirsName(String lastName, String firstName) {
+        return database.getPersons().stream().filter(person -> person.getLastName().equalsIgnoreCase(lastName))
+                .collect(Collectors.toList());
+    }
+
+    public MedicalRecord getMedicalRecordByFirstNameAndLastName(String firstName, String lastName) {
+        MedicalRecord medicalRecordResult = new MedicalRecord();
+        for (MedicalRecord medicalRecord : database.getMedicalrecords()) {
+            if (medicalRecord.getFirstName().equalsIgnoreCase(firstName)
+                    && medicalRecord.getLastName().equalsIgnoreCase(lastName)) {
+                medicalRecordResult = medicalRecord;
+            }
+        }
+        return medicalRecordResult;
+    }
+
+    public FireStation getStationByAddress(String address) {
+        for (FireStation firestation : database.getFirestations()) {
+            if (firestation.getAddress().equalsIgnoreCase(address)) {
+                return firestation;
+            }
+        }
+        return null;
+
+    }
+
+
+    public Person getPersonByName(String firstName, String lastName) {
+        Person personResult = new Person();
+        for (Person person : database.getPersons()) {
+            if (person.getFirstName().equalsIgnoreCase(firstName) && person.getLastName().equalsIgnoreCase(lastName)) {
+                personResult = person;
+            }
+        }
+        return personResult;
+    }
+    public List<FireStation> getAllStation() {
+        return database.getFirestations();
+    }
+
+    public List<FireStation> getFirestationByStation(String firestation) {
+
+        return database.getFirestations().stream()
+                .filter(fireStation -> fireStation.getStation().equalsIgnoreCase(firestation))
+                .collect(Collectors.toList());
+
+    }
+
+    public List<String> getListFireStation(List<String> stationNumber) {
+        return database.getFirestations().stream()
+                .filter(fireStation -> stationNumber.contains(fireStation.getStation())).map(FireStation::getAddress)
+                .collect(Collectors.toList());
+    }
+
+
 
 
 }
