@@ -1,16 +1,16 @@
 package com.sylvain.safetyAlerts.models;
 
-public class Firestation {
+public class FireStation {
     private String address;
     private String station;
 
-    public Firestation(String address, String station) {
+    public FireStation(String address, String station) {
 
         this.address = address;
         this.station = station;
     }
 
-    public Firestation() {
+    public FireStation() {
 
     }
 
@@ -48,7 +48,7 @@ public class Firestation {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        Firestation other = (Firestation) obj;
+        FireStation other = (FireStation) obj;
         if (address == null) {
             if (other.address != null)
                 return false;

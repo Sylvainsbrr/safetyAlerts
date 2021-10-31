@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Database {
     private List<Person> persons = new ArrayList<Person>();
-    private List<Firestation> firestations = new ArrayList<Firestation>();
+    private List<FireStation> firestations = new ArrayList<FireStation>();
     private List<MedicalRecord> medicalrecords = new ArrayList<MedicalRecord>();
 
     public List<Person> getPersons() {
@@ -16,11 +16,11 @@ public class Database {
         this.persons = persons;
     }
 
-    public List<Firestation> getFirestations() {
+    public List<FireStation> getFirestations() {
         return firestations;
     }
 
-    public void setFirestations(List<Firestation> firestations) {
+    public void setFirestations(List<FireStation> firestations) {
         this.firestations = firestations;
     }
 
@@ -31,5 +31,4 @@ public class Database {
     public void setMedicalrecords(List<MedicalRecord> medicalrecords) {
         this.medicalrecords = medicalrecords;
     }
-
 }
