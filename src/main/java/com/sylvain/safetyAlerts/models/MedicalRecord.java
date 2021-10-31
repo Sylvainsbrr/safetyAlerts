@@ -1,32 +1,29 @@
 package com.sylvain.safetyAlerts.models;
 
 import javax.validation.constraints.NotBlank;
+import java.util.List;
 
-public class Person {
+public class MedicalRecord {
     @NotBlank
     private String firstName;
     @NotBlank
     private String lastName;
-    private String address;
-    private String city;
-    private String zip;
-    private String phone;
-    private String email;
+    private String birthdate;
+    private List<String> medications;
+    private List<String> allergies;
 
-    public Person() {
+    public MedicalRecord() {
 
     }
 
-    public Person(@NotBlank String firstName, @NotBlank String lastName, String address, String city, String zip, String phone,
-                  String email) {
+    public MedicalRecord(@NotBlank String firstName,@NotBlank String lastName, String birthdate, List<String> medications,
+                         List<String> allergies) {
 
         this.firstName = firstName;
         this.lastName = lastName;
-        this.address = address;
-        this.city = city;
-        this.zip = zip;
-        this.phone = phone;
-        this.email = email;
+        this.birthdate = birthdate;
+        this.medications = medications;
+        this.allergies = allergies;
     }
 
     public String getFirstName() {
@@ -45,44 +42,28 @@ public class Person {
         this.lastName = lastName;
     }
 
-    public String getAddress() {
-        return address;
+    public String getBirthdate() {
+        return birthdate;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setBirthdate(String birthdate) {
+        this.birthdate = birthdate;
     }
 
-    public String getCity() {
-        return city;
+    public List<String> getMedications() {
+        return medications;
     }
 
-    public void setCity(String city) {
-        this.city = city;
+    public void setMedications(List<String> medications) {
+        this.medications = medications;
     }
 
-    public String getZip() {
-        return zip;
+    public List<String> getAllergies() {
+        return allergies;
     }
 
-    public void setZip(String zip) {
-        this.zip = zip;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
+    public void setAllergies(List<String> allergies) {
+        this.allergies = allergies;
     }
 
     @Override
@@ -102,7 +83,7 @@ public class Person {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        Person other = (Person) obj;
+        MedicalRecord other = (MedicalRecord) obj;
         if (firstName == null) {
             if (other.firstName != null)
                 return false;
@@ -115,4 +96,5 @@ public class Person {
             return false;
         return true;
     }
+
 }
