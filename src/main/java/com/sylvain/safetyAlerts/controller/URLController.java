@@ -1,8 +1,7 @@
 package com.sylvain.safetyAlerts.controller;
 
-import com.sylvain.safetyAlerts.dto.ChildAlertDTO;
-import com.sylvain.safetyAlerts.dto.FireDTO;
-import com.sylvain.safetyAlerts.dto.PersonInfoDTO;
+import com.sylvain.safetyAlerts.dto.*;
+import com.sylvain.safetyAlerts.service.IFireStationService;
 import com.sylvain.safetyAlerts.service.IPersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +15,9 @@ public class URLController {
 
     @Autowired
     private IPersonService personService;
+    @Autowired
+    private IFireStationService fireStationService;
+
 
     @GetMapping("communityEmail")
     public List<String> getCommunityEmail(@RequestParam String city){
@@ -36,6 +38,22 @@ public class URLController {
     public List<FireDTO> getPersonByAddress(@RequestParam String address){
         return personService.getPersonByAddress(address);
     }
+
+    @GetMapping("phoneAlert")
+    public List<String> getPhoneByStation(@RequestParam String firestation){
+        return fireStationService.getPhoneByStation(firestation);
+    }
+
+    @GetMapping("firestation")
+    public List<CoverageDTO> getCoverageByFireStation(@RequestParam String stationNumber){
+        return fireStationService.getCoverageByFireStation(stationNumber);
+    }
+
+    @GetMapping("flood/stations")
+    public List<FoyerDTO> getFoyerByFireStation(@RequestParam List<String> stations){
+        return fireStationService.getFoyerByFireStation(stations);
+    }
+
 
 
 }
