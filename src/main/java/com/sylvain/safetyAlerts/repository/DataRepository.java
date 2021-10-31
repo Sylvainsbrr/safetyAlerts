@@ -8,11 +8,14 @@ import com.sylvain.safetyAlerts.models.MedicalRecord;
 import com.sylvain.safetyAlerts.models.Person;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.stereotype.Repository;
 
 import java.io.*;
 import java.net.URL;
 import java.util.List;
+import java.util.stream.Collectors;
 
+@Repository
 public class DataRepository {
     // permet de mapper le json en objet java.
     private static final ObjectMapper objectMapper = new ObjectMapper();
@@ -102,6 +105,12 @@ public class DataRepository {
     public List<MedicalRecord> getListMedicalRecord() {
         return database.getMedicalrecords();
     }
+
+
+    public List<Person> getPersonByCity(String city) {
+        return database.getPersons().stream().filter(person -> person.getCity().equalsIgnoreCase(city)).collect(Collectors.toList());
+    }
+
 
 
 }

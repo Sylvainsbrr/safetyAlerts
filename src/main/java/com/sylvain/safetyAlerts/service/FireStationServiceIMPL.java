@@ -1,7 +1,9 @@
 package com.sylvain.safetyAlerts.service;
 
 import com.sylvain.safetyAlerts.models.FireStation;
+import org.springframework.stereotype.Service;
 
+@Service
 public class FireStationServiceIMPL implements IFireStationService {
 
 
