@@ -1,13 +1,18 @@
 package com.sylvain.safetyAlerts.service;
 
+import com.sylvain.safetyAlerts.dao.PersonDao;
+import com.sylvain.safetyAlerts.dao.PersonDaoImpl;
 import com.sylvain.safetyAlerts.dto.ChildAlertDTO;
 import com.sylvain.safetyAlerts.dto.FireDTO;
 import com.sylvain.safetyAlerts.dto.PersonInfoDTO;
+import com.sylvain.safetyAlerts.exception.DataAlreadyExistException;
+import com.sylvain.safetyAlerts.exception.DataNotFoundException;
 import com.sylvain.safetyAlerts.models.FireStation;
 import com.sylvain.safetyAlerts.models.MedicalRecord;
 import com.sylvain.safetyAlerts.models.Person;
 import com.sylvain.safetyAlerts.repository.DataRepository;
 import com.sylvain.safetyAlerts.utils.CalculateAge;
+import org.apache.logging.log4j.LogManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,8 +21,13 @@ import java.util.List;
 
 @Service
 public class PersonServiceIMPL implements IPersonService {
+
+    private static final org.apache.logging.log4j.Logger logger = LogManager.getLogger(PersonDaoImpl.class);
+
     @Autowired
     private DataRepository dataRepository;
+    @Autowired
+    private PersonDao personDao;
 
     @Override
     public List<String> getCommunityEmail(String city) {
@@ -101,16 +111,30 @@ public class PersonServiceIMPL implements IPersonService {
 
     @Override
     public boolean createPerson(Person person) {
-        return false;
+        // verification que la person n'existe pas dans la DAO(datarepository)
+        if (!dataRepository.getAllPersons().contains(person)) {
+            personDao.createPerson(person);
+            logger.info("createPerson : Personne creer");
+            return true;
+        } else {
+            logger.error("Cette personne " + person.getFirstName() + " " + person.getLastName() + "existe déja");
+            throw new DataAlreadyExistException("Cette personne " + person.getFirstName() + " " + person.getLastName() + "existe déja");
+        }
     }
 
     @Override
     public boolean updatePerson(Person person) {
-        return false;
+        if (!personDao.updatePerson(person)) {
+            throw new DataNotFoundException("Cette personne " + person.getFirstName() + " " + person.getLastName() + "n'existe pas");
+        }
+        return true;
     }
 
     @Override
     public boolean deletePerson(Person person) {
-        return false;
+        if (!personDao.deletePerson(person)) {
+            throw new DataNotFoundException("Cette personne " + person.getFirstName() + " " + person.getLastName() + "n'existe pas");
+        }
+        return true;
     }
 }
