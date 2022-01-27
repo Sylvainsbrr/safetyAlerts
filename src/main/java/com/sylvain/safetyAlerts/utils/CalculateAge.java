@@ -24,10 +24,7 @@ public class CalculateAge {
                 return true;
             }
         } catch (ParseException e) {
-            // Si la date de naissance n'est pas bien formatée$
-            // Alors on ne fait rien
-            // La personne sera dans la liste des personDTO
-            // Mais elle ne sera pas comptée parmi les enfants / adultes
+            // Si la date de naissance n'a pas le bon format la personne seras considéré en temps qu'adulte
         }
 
         return false;
@@ -49,10 +46,7 @@ public class CalculateAge {
             return (int)anneeDiff;
 
         } catch (ParseException e) {
-            // Si la date de naissance n'est pas bien formatée$
-            // Alors on ne fait rien
-            // La personne sera dans la liste des personDTO
-            // Mais elle ne sera pas comptée parmi les enfants / adultes
+            // Si la date de naissance n'a pas le bon format la personne seras considéré en temps qu'adulte
         }
 
         return 0;

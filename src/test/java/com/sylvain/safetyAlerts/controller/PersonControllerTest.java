@@ -42,109 +42,94 @@ public class PersonControllerTest {
 
     @Test
     void createPersonValid() throws Exception {
-        // given
+
         ObjectMapper objectMapper = new ObjectMapper();
         ObjectNode jsonPerson = objectMapper.createObjectNode();
         jsonPerson.set("firstName", TextNode.valueOf(firstName));
         jsonPerson.set("lastName", TextNode.valueOf(lastName));
-        // when
 
-        // then
         mockMvc.perform(MockMvcRequestBuilders.post("/person") // requete
-                        .contentType(MediaType.APPLICATION_JSON).content(jsonPerson.toString())) // contenu
+                .contentType(MediaType.APPLICATION_JSON).content(jsonPerson.toString())) // contenu
                 .andExpect(MockMvcResultMatchers.status().isCreated()); // test
     }
 
     @Test
     void createPersonInvalid() throws Exception {
-        // given
 
         ObjectMapper objectMapper = new ObjectMapper();
         ObjectNode jsonPerson = objectMapper.createObjectNode();
         jsonPerson.set("firstName", TextNode.valueOf(firstName));
         jsonPerson.set("lastName", TextNode.valueOf(""));
-        // when
 
-        // then
         mockMvc.perform(MockMvcRequestBuilders.post("/person") // requete
-                        .contentType(MediaType.APPLICATION_JSON).content(jsonPerson.toString())) // contenu
+                .contentType(MediaType.APPLICATION_JSON).content(jsonPerson.toString())) // contenu
                 .andExpect(MockMvcResultMatchers.status().isBadRequest()); // test
     }
 
     @Test
     void createPersonAlreadyExist() throws Exception {
-        // given
+
         Mockito.doThrow(DataAlreadyExistException.class).when(iPersonService).createPerson(Mockito.any());
         ObjectMapper objectMapper = new ObjectMapper();
         ObjectNode jsonPerson = objectMapper.createObjectNode();
         jsonPerson.set("firstName", TextNode.valueOf(firstName));
         jsonPerson.set("lastName", TextNode.valueOf("lastName"));
 
-        // when
-
-        // then
         mockMvc.perform(MockMvcRequestBuilders.post("/person") // requete
-                        .contentType(MediaType.APPLICATION_JSON).content(jsonPerson.toString())) // contenu
+                .contentType(MediaType.APPLICATION_JSON).content(jsonPerson.toString())) // contenu
                 .andExpect(MockMvcResultMatchers.status().isConflict()); // test
     }
 
     @Test
     void updatePersonValid() throws Exception {
-        //given
+
         ObjectMapper objectMapper = new ObjectMapper();
         ObjectNode jsonPerson = objectMapper.createObjectNode();
         jsonPerson.set("firstName", TextNode.valueOf(firstName));
         jsonPerson.set("lastName", TextNode.valueOf(lastName));
-        //when
 
-        //then
-        mockMvc.perform(MockMvcRequestBuilders.put("/person")      //requete
-                        .contentType(MediaType.APPLICATION_JSON).content(jsonPerson.toString())) // contenu
+        mockMvc.perform(MockMvcRequestBuilders.put("/person") //requete
+                .contentType(MediaType.APPLICATION_JSON).content(jsonPerson.toString())) // contenu
                 .andExpect(MockMvcResultMatchers.status().isNoContent()); // test
     }
 
     @Test
     void updatePersonInvalid() throws Exception {
-        //given
+
         ObjectMapper objectMapper = new ObjectMapper();
         ObjectNode jsonPerson = objectMapper.createObjectNode();
         jsonPerson.set("firstName", TextNode.valueOf(""));
         jsonPerson.set("lasName", TextNode.valueOf(""));
-        //when
 
-        //then
-        mockMvc.perform(MockMvcRequestBuilders.put("/person")      //requete
-                        .contentType(MediaType.APPLICATION_JSON).content(jsonPerson.toString())) // contenu
+        mockMvc.perform(MockMvcRequestBuilders.put("/person")//requete
+                .contentType(MediaType.APPLICATION_JSON).content(jsonPerson.toString())) // contenu
                 .andExpect(MockMvcResultMatchers.status().isBadRequest()); // test
     }
 
 
     @Test
     void deletePersonValid() throws Exception {
-        //given
+
         ObjectMapper objectMapper = new ObjectMapper();
         ObjectNode jsonPerson = objectMapper.createObjectNode();
         jsonPerson.set("firstName", TextNode.valueOf(firstName));
         jsonPerson.set("lastName", TextNode.valueOf(lastName));
-        //when
 
-        //then
-        mockMvc.perform(MockMvcRequestBuilders.delete("/person")      //requete
-                        .contentType(MediaType.APPLICATION_JSON).content(jsonPerson.toString())) // contenu
+        mockMvc.perform(MockMvcRequestBuilders.delete("/person")//requete
+                .contentType(MediaType.APPLICATION_JSON).content(jsonPerson.toString())) // contenu
                 .andExpect(MockMvcResultMatchers.status().isResetContent()); // test
     }
 
     @Test
     void deletePersonInvalid() throws Exception {
-        //given
-        // on mock IPersonService on lui dit de renvoyer l'exception DataAlreadyExist uniquement quand on lui demande de creer une personne
+        // on mock IPersonService on lui dit de renvoyer l'exception
+        // DataAlreadyExist uniquement quand on lui demande de creer une personne
         ObjectMapper objectMapper = new ObjectMapper();
         ObjectNode jsonPerson = objectMapper.createObjectNode();
         jsonPerson.set("firstName", TextNode.valueOf(""));
         jsonPerson.set("lastName", TextNode.valueOf(""));
-        //when
-        //then
-        mockMvc.perform(MockMvcRequestBuilders.delete("/person")      //requete
+
+        mockMvc.perform(MockMvcRequestBuilders.delete("/person")//requete
                         .contentType(MediaType.APPLICATION_JSON).content(jsonPerson.toString())) // contenu
                 .andExpect(MockMvcResultMatchers.status().isBadRequest()); // test
     }

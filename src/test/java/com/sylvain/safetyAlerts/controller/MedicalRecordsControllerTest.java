@@ -45,17 +45,14 @@ public class MedicalRecordsControllerTest {
         ObjectMapper obm = new ObjectMapper();
         ObjectNode jsonMedicalRecord = obm.createObjectNode();
 
-        // GIVEN
-
         jsonMedicalRecord.set("firstName", TextNode.valueOf(firstName));
         jsonMedicalRecord.set("lastName", TextNode.valueOf(lastName));
         jsonMedicalRecord.set("birthdate", TextNode.valueOf(birthdate));
 
-        // WHEN
-        // THEN
+
         mockMvc.perform(MockMvcRequestBuilders.post("/medicalRecord")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(jsonMedicalRecord.toString()))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonMedicalRecord.toString()))
                 .andExpect(MockMvcResultMatchers.status().isCreated());
     }
 
@@ -65,13 +62,9 @@ public class MedicalRecordsControllerTest {
         ObjectMapper obm = new ObjectMapper();
         ObjectNode jsonMedicalRecord = obm.createObjectNode();
 
-        //GIven
         jsonMedicalRecord.set("firstName", TextNode.valueOf(""));
         jsonMedicalRecord.set("lastName", TextNode.valueOf(lastName));
 
-
-        //When
-        //then
         mockMvc.perform(MockMvcRequestBuilders.post("/medicalRecord")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonMedicalRecord.toString()))
@@ -85,27 +78,19 @@ public class MedicalRecordsControllerTest {
         // DataALreadExist
         // quand on lui demande de renvoyer un Medicalrecord existant
 
-        Mockito.doThrow(DataAlreadyExistException.class)
-                .when(medicalrecordService).createMedicalRecord(Mockito.any());
+        Mockito.doThrow(DataAlreadyExistException.class).when(medicalrecordService).createMedicalRecord(Mockito.any());
 
         ObjectMapper obm = new ObjectMapper();
         ObjectNode jsonMedicalrecord = obm.createObjectNode();
 
-        // GIVEN
-
         jsonMedicalrecord.set("firstName", TextNode.valueOf(firstName));
         jsonMedicalrecord.set("lastName", TextNode.valueOf(lastName));
 
-        // WHEN
-        // THEN
-
         mockMvc.perform(MockMvcRequestBuilders.post("/Medicalrecord")
-                        .contentType(MediaType.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)
             .content(jsonMedicalrecord.toString()))
-                .andExpect(MockMvcResultMatchers.status().isNotFound());
+            .andExpect(MockMvcResultMatchers.status().isNotFound());
     }
-
-    // --------------- MAJ DE DOSSIERS MEDICAUX -----------------
 
     @Test
     void updateMedicalrecordValid() throws Exception {
@@ -113,14 +98,10 @@ public class MedicalRecordsControllerTest {
         ObjectMapper obm = new ObjectMapper();
         ObjectNode jsonMedicalrecord = obm.createObjectNode();
 
-        // GIVEN
 
         jsonMedicalrecord.set("firstName", TextNode.valueOf("John"));
         jsonMedicalrecord.set("lastName", TextNode.valueOf("Boyd"));
         jsonMedicalrecord.set("birthdate", TextNode.valueOf(birthdate));
-
-        // WHEN
-        // THEN
 
         mockMvc.perform(MockMvcRequestBuilders.put("/Medicalrecord").contentType(MediaType.APPLICATION_JSON)
                 .content(jsonMedicalrecord.toString()))
@@ -133,13 +114,8 @@ public class MedicalRecordsControllerTest {
         ObjectMapper obm = new ObjectMapper();
         ObjectNode jsonMedicalrecord = obm.createObjectNode();
 
-        // GIVEN
-
         jsonMedicalrecord.set("firstName", TextNode.valueOf(""));
         jsonMedicalrecord.set("lastName", TextNode.valueOf(""));
-
-        // WHEN
-        // THEN
 
         mockMvc.perform(MockMvcRequestBuilders.put("/Medicalrecord")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -156,13 +132,8 @@ public class MedicalRecordsControllerTest {
         ObjectMapper obm = new ObjectMapper();
         ObjectNode jsonMedicalrecord = obm.createObjectNode();
 
-        // GIVEN
-
         jsonMedicalrecord.set("firstName", TextNode.valueOf(firstName));
         jsonMedicalrecord.set("lastName", TextNode.valueOf(lastName));
-
-        // WHEN
-        // THEN
 
         mockMvc.perform(MockMvcRequestBuilders.put("/Medicalrecord")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -171,18 +142,14 @@ public class MedicalRecordsControllerTest {
     }
 
     @Test
-    void deleteFireStationValid() throws Exception {
+    void deleteMedicalrecordValid() throws Exception {
 
         ObjectMapper obm = new ObjectMapper();
         ObjectNode jsonMedicalrecord = obm.createObjectNode();
 
-        // GIVEN
-
         jsonMedicalrecord.set("firstName", TextNode.valueOf(firstName));
         jsonMedicalrecord.set("lastName", TextNode.valueOf(lastName));
 
-        // WHEN
-        // THEN
         mockMvc.perform(MockMvcRequestBuilders.delete("/medicalRecord")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonMedicalrecord.toString()))

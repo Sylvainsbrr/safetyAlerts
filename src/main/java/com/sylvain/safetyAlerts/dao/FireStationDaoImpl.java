@@ -43,7 +43,6 @@ public class FireStationDaoImpl implements FireStationDao {
         List<FireStation> fireStationListDeleted = new ArrayList<>();
         // Suppression par station et adresse
         if (!"".equals(fireStation.getStation()) && (fireStation.getStation() != null) && (!"".equals(fireStation.getAddress()) && (fireStation.getAddress() != null))) {
-
             for (FireStation fs : dataRepository.getDatabase().getFirestations()) {
                 if (fs.getStation().contentEquals(fireStation.getStation()) && (fs.getAddress().contentEquals(fireStation.getAddress()))) {
                     fireStationListDeleted.add(fs);
@@ -52,7 +51,6 @@ public class FireStationDaoImpl implements FireStationDao {
         } else {
             // Suppression par adresse
             if (!"".equals(fireStation.getAddress()) && (fireStation.getAddress() != null)) {
-
                 for (FireStation fs : dataRepository.getDatabase().getFirestations()) {
                     if (fs.getAddress().contentEquals(fireStation.getAddress())) {
                         fireStationListDeleted.add(fs);
@@ -60,9 +58,7 @@ public class FireStationDaoImpl implements FireStationDao {
                 }
             }
             // Suppression par station
-
             if (!"".equals(fireStation.getStation()) && (fireStation.getStation() != null)) {
-
                 for (FireStation fs : dataRepository.getDatabase().getFirestations()) {
                     if (fs.getStation().contentEquals(fireStation.getStation())) {
                         fireStationListDeleted.add(fs);

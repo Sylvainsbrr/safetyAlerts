@@ -82,18 +82,11 @@ public class MedicalRecordServiceTest {
     @Test
     void createNonExistingMedicalRecord() throws Exception {
 
-        // GIVEN
         List<MedicalRecord> medicalRecordList = new ArrayList<>();
         medicalRecordList.add(medicalrecordBoyd);
 
-        // WHEN
         Mockito.when(dataRepository.getListMedicalRecord()).thenReturn(medicalRecordList);
-
-        Mockito.when(
-                        dataRepository.getPersonByName(medicalrecordChild.getFirstName(), medicalrecordChild.getLastName()))
-                .thenReturn(personChild);
-
-        // THEN
+        Mockito.when(dataRepository.getPersonByName(medicalrecordChild.getFirstName(), medicalrecordChild.getLastName())).thenReturn(personChild);
 
         medicalRecordService.createMedicalRecord(medicalrecordChild);
         verify(medicalRecordDaoMock, Mockito.times(1)).createMedicalRecord(medicalrecordChild);
@@ -102,25 +95,14 @@ public class MedicalRecordServiceTest {
 
     @Test
     void updateExistingMedicalRecord() throws Exception {
-        // GIVEN
-
-        // WHEN
         Mockito.when(medicalRecordDaoMock.updateMedicalRecord(any(MedicalRecord.class))).thenReturn(true);
-
-        // THEN
         medicalRecordService.updateMedicalRecord(medicalrecordBoyd);
         verify(medicalRecordDaoMock, Mockito.times(1)).updateMedicalRecord(medicalrecordBoyd);
     }
 
     @Test
     void updateNonExistingMedicalRecord() throws Exception {
-
-        // GIVEN
-
-        // WHEN
         Mockito.when(medicalRecordDaoMock.updateMedicalRecord(any(MedicalRecord.class))).thenReturn(false);
-
-        // THEN
         try {
             medicalRecordService.updateMedicalRecord(medicalrecordBoyd);
             verify(medicalRecordDaoMock, Mockito.times(0)).updateMedicalRecord(medicalrecordBoyd);
@@ -131,32 +113,19 @@ public class MedicalRecordServiceTest {
 
     @Test
     void deleteExistingMedicalRecord() throws Exception {
-        // GIVEN
-
-        // WHEN
         Mockito.when(medicalRecordDaoMock.deleteMedicalRecord(any(MedicalRecord.class))).thenReturn(true);
-
-        // THEN
         medicalRecordService.deleteMedicalRecord(medicalrecordBoyd);
         verify(medicalRecordDaoMock, Mockito.times(1)).deleteMedicalRecord(medicalrecordBoyd);
-
     }
 
     @Test
     void deleteNonExistingMedicalRecord() throws Exception {
-
-        // GIVEN
-
-        // WHEN
         Mockito.when(medicalRecordDaoMock.deleteMedicalRecord(any(MedicalRecord.class))).thenReturn(false);
-
-        // THEN
         try {
             medicalRecordService.deleteMedicalRecord(medicalrecordBoyd);
             verify(medicalRecordDaoMock, Mockito.times(2)).deleteMedicalRecord(medicalrecordBoyd);
         } catch (DataNotFoundException dnfe) {
             assert (dnfe.getMessage().contains(" n'a pas de dossier medical "));
         }
-
     }
 }

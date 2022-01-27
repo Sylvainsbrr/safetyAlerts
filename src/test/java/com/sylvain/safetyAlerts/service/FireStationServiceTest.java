@@ -65,16 +65,9 @@ public class FireStationServiceTest {
 
     @Test
     public void createExistingFirestationTest() throws Exception {
-
-        // GIVEN
         List<FireStation> listFirestation = new ArrayList<FireStation>();
         listFirestation.add(firestation1);
-
-        // WHEN
         Mockito.when(dataRepository.getAllStation()).thenReturn(listFirestation);
-
-        // THEN
-        // On crée une station qui existe
         try {
             Assertions.assertFalse(fireStationService.createFireStation(firestation1));
             verify(firestationDaoMock, Mockito.times(0)).createFireStation(firestation1);
@@ -85,16 +78,9 @@ public class FireStationServiceTest {
 
     @Test
     public void createInvalidFirestationTest() throws Exception {
-
-        // GIVEN
         List<FireStation> listFirestation = new ArrayList<FireStation>();
         listFirestation.add(firestationVide);
-
-        // WHEN
         Mockito.when(dataRepository.getAllStation()).thenReturn(listFirestation);
-
-        // THEN
-        // On crée une station qui existe
         try {
             Assertions.assertFalse(fireStationService.createFireStation(firestationVide));
             verify(firestationDaoMock, Mockito.times(0)).createFireStation(firestationVide);
@@ -106,33 +92,22 @@ public class FireStationServiceTest {
 
     @Test
     public void createValidFirestationTest() throws Exception {
-        //given
         List<FireStation> listFirestation = new ArrayList<FireStation>();
-        //when
         Mockito.when(dataRepository.getAllStation()).thenReturn(listFirestation);
-        //then
         Assertions.assertTrue(fireStationService.createFireStation(firestation1));
         verify(firestationDaoMock, Mockito.times(1)).createFireStation(firestation1);
     }
 
     @Test
     public void updateExistingFirestationTest() throws Exception {
-        // GIVEN
-        // WHEN
         Mockito.when(firestationDaoMock.updateFireStation(any(FireStation.class))).thenReturn(true);
-        // THEN
-        // On MAJ la station
         Assertions.assertTrue(fireStationService.updateFireStation(firestation1));
         verify(firestationDaoMock, Mockito.times(1)).updateFireStation(firestation1);
     }
 
     @Test
     public void updateNonExistingFirestationTest() throws Exception {
-        // GIVEN
-        // WHEN
         Mockito.when(firestationDaoMock.updateFireStation(any(FireStation.class))).thenReturn(false);
-        // THEN
-        // On crée une station qui existe
         try {
             Assertions.assertFalse(fireStationService.updateFireStation(firestation1));
             verify(firestationDaoMock, Mockito.times(1)).updateFireStation(firestation1);
@@ -144,19 +119,13 @@ public class FireStationServiceTest {
     @Test
     public void deleteExistingFirestationTest() throws Exception {
         Mockito.when(firestationDaoMock.deleteFireStation(any(FireStation.class))).thenReturn(true);
-        // THEN
-        // On MAJ la station
         Assertions.assertTrue(fireStationService.deleteFireStation(firestation1));
         verify(firestationDaoMock, Mockito.times(1)).deleteFireStation(firestation1);
     }
 
     @Test
     public void deleteNonExistingFirestationTest() throws Exception {
-        // GIVEN
-        // WHEN
         Mockito.when(firestationDaoMock.deleteFireStation(any(FireStation.class))).thenReturn(false);
-        // THEN
-        // On crée une station qui existe
         try {
             Assertions.assertFalse(fireStationService.deleteFireStation(firestation1));
             verify(firestationDaoMock, Mockito.times(1)).deleteFireStation(firestation1);

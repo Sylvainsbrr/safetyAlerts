@@ -35,9 +35,8 @@ public class FireStationServiceIMPL implements IFireStationService {
 
     @Override
     public boolean createFireStation(FireStation fireStation) {
-        // Verification que la fireStation n'existe pas deja dans la DAO(datarepository)
+        // Verification que la caserne n'existe pas deja dans la DAO(datarepository)
         if (!StringUtils.isEmpty(fireStation.getStation()) && !StringUtils.isEmpty(fireStation.getAddress())) {
-
             if (!dataRepository.getAllStation().contains(fireStation)) {
                 fireStationDao.createFireStation(fireStation);
                 return true;
@@ -51,7 +50,7 @@ public class FireStationServiceIMPL implements IFireStationService {
     @Override
     public boolean updateFireStation(FireStation fireStation) {
         if (!fireStationDao.updateFireStation(fireStation)) {
-            throw new DataNotFoundException("La fireStation " + fireStation.getStation() + " " + fireStation.getAddress() + "n'existe pas");
+            throw new DataNotFoundException("La fireStation " + fireStation.getStation() + " " + fireStation.getAddress() + "est introuvable");
         }
         return true;
     }
@@ -59,7 +58,7 @@ public class FireStationServiceIMPL implements IFireStationService {
     @Override
     public boolean deleteFireStation(FireStation fireStation) {
         if (!fireStationDao.deleteFireStation(fireStation)) {
-            throw new DataNotFoundException("La fireStation " + fireStation.getStation() + " " + fireStation.getAddress() + "n'existe pas");
+            throw new DataNotFoundException("La fireStation " + fireStation.getStation() + " " + fireStation.getAddress() + "est introuvable");
         }
         return true;
     }

@@ -13,7 +13,7 @@ public interface IFireStationService {
 
     boolean deleteFireStation(FireStation fireStation);
 
-    List<String> getPhoneByStation(String firestation);
+    List<String> getPhoneByStation(String fireStation);
     List<CoverageDTO> getCoverageByFireStation(String stationNumber);
     List<FoyerDTO> getFoyerByFireStation(List<String> stations);
 }

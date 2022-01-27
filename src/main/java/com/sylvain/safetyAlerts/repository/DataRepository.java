@@ -22,7 +22,7 @@ public class DataRepository {
     private static Database database;
     private String JSON_FILE = "data.json";
     private static final Logger logger = LogManager.getLogger(DataRepository.class);
-    // On commit dans le main et non dans les tests
+    // If true on sauvegarde les changements sur le json
     private Boolean commit = true;
 
     public DataRepository() throws IOException {
