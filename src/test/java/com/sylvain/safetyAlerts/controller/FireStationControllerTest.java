@@ -145,11 +145,12 @@ public class FireStationControllerTest {
     @Test
     void deleteFireStationWhenIsNotFound() throws Exception{
 
+        Mockito.doThrow(DataNotFoundException.class).when(firestationService).deleteFireStation(Mockito.any());
         ObjectMapper obm = new ObjectMapper();
         ObjectNode jsonFireStation = obm.createObjectNode();
 
-        jsonFireStation.set("station", TextNode.valueOf(StationTest));
-        jsonFireStation.set("address", TextNode.valueOf(AddressTest));
+        jsonFireStation.set("station", TextNode.valueOf(""));
+        jsonFireStation.set("address", TextNode.valueOf(""));
 
         mockMvc.perform(MockMvcRequestBuilders.delete("/firestation").contentType(MediaType.APPLICATION_JSON)
                 .content(jsonFireStation.toString()))

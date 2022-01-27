@@ -112,7 +112,7 @@ public class FireStationServiceTest {
             Assertions.assertFalse(fireStationService.updateFireStation(firestation1));
             verify(firestationDaoMock, Mockito.times(1)).updateFireStation(firestation1);
         } catch (DataNotFoundException dnfe) {
-            assert (dnfe.getMessage().contains("n'existe pas"));
+            assert (dnfe.getMessage().contains("est introuvable"));
         }
     }
 
@@ -130,7 +130,7 @@ public class FireStationServiceTest {
             Assertions.assertFalse(fireStationService.deleteFireStation(firestation1));
             verify(firestationDaoMock, Mockito.times(1)).deleteFireStation(firestation1);
         } catch (DataNotFoundException dnfe) {
-            assert (dnfe.getMessage().contains("n'existe pas"));
+            assert (dnfe.getMessage().contains("est introuvable"));
         }
     }
 
@@ -153,11 +153,11 @@ public class FireStationServiceTest {
 
     @Test
     public void getFoyerByFireStationTest() {
-        List<String> addreList = new ArrayList<String>();
-        addreList.add("StationUn");
-        Mockito.when(dataRepository.getListFireStation(List.of("1"))).thenReturn(addreList);
+        List<String> addressList = new ArrayList<String>();
+        addressList.add("StationUn");
+        Mockito.when(dataRepository.getListFireStation(List.of("1"))).thenReturn(addressList);
         FireDTO fireDTO = new FireDTO();
-        fireDTO.setAge(9);
+        fireDTO.setAge(10);
         fireDTO.setFirstName("thomas");
         fireDTO.setLastName("Poe");
         fireDTO.setAllergies(allergies);

@@ -3,6 +3,7 @@ package com.sylvain.safetyAlerts.service;
 import com.sylvain.safetyAlerts.dao.MedicalRecordDao;
 import com.sylvain.safetyAlerts.dao.PersonDao;
 import com.sylvain.safetyAlerts.dto.ChildAlertDTO;
+import com.sylvain.safetyAlerts.dto.PersonInfoDTO;
 import com.sylvain.safetyAlerts.exception.DataAlreadyExistException;
 import com.sylvain.safetyAlerts.exception.DataNotFoundException;
 import com.sylvain.safetyAlerts.models.MedicalRecord;
@@ -18,6 +19,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -44,9 +47,12 @@ public class PersonServiceTest {
 
     Person jill = new Person("jhony", "doe", "add1", "Washinton DC", "12345", "1234", "jhony@mail.com");
     Person chris = new Person("tom", "poe", "add2", "newyork", "72300", "1435", "tom@mail.com");
+    Person obama = new Person("Barack", "obama", "WhiteHouse", "Washinton DC", "1232111","06755" , "obama@mohamed.com");
 
     List<String> medication = List.of("lsd,lean");
     List<String> allergies = List.of("polen, girls");
+
+    MedicalRecord medicalrecordObama = new MedicalRecord("Barack", "obama", "03/06/1984", medication, allergies);
 
     String city = "add1";
 
@@ -119,8 +125,6 @@ public class PersonServiceTest {
     public void deleteExistingPersonTest() {
         // when
         Mockito.when(personDao.deletePerson(any(Person.class))).thenReturn(true);
-
-        // then
         Assertions.assertThat(personService.deletePerson(chris));
 
         verify(personDao, Mockito.times(1)).deletePerson((chris));
@@ -129,11 +133,7 @@ public class PersonServiceTest {
     @Test
     public void deleteNoneExistingPersonTest() throws Exception {
 
-        // when
         Mockito.when(personDao.deletePerson(any(Person.class))).thenReturn(false);
-
-        // THEN
-        // On crée un personne qui existe
         try {
             Assertions.assertThat(personService.deletePerson(chris));
             verify(personDao, Mockito.times(1)).deletePerson(any());
@@ -178,10 +178,30 @@ public class PersonServiceTest {
         org.junit.jupiter.api.Assertions.assertEquals(result.size(), 1);
 
         ChildAlertDTO childAlertDTO = result.get(0);
-        org.junit.jupiter.api.Assertions.assertEquals(childAlertDTO.getAge(), 8);
+        org.junit.jupiter.api.Assertions.assertEquals(childAlertDTO.getAge(), 9);
         org.junit.jupiter.api.Assertions.assertEquals(childAlertDTO.getFistName(), "tom");
         org.junit.jupiter.api.Assertions.assertEquals(childAlertDTO.getLastName(),"poe");
         org.junit.jupiter.api.Assertions.assertEquals(childAlertDTO.getFamilyMember().size(), 0);
 
+    }
+
+    @Test
+    public void getPersonTest() throws Exception {
+        //Given
+        medicalrecordObama.setBirthdate(LocalDate.now().minusYears(30).format(DateTimeFormatter.ofPattern("MM/dd/yyyy")));
+        Mockito.when(dataRepository.getPersonByLastNameAndFirsName(obama.getLastName(),obama.getFirstName())).thenReturn(List.of(obama));
+        Mockito.when(dataRepository.getMedicalRecordByFirstNameAndLastName(obama.getFirstName(), obama.getLastName())).thenReturn(medicalrecordObama);
+        //when
+        List<PersonInfoDTO> infos = personService.getPersonInfo(obama.getFirstName(), obama.getLastName());
+        //then
+        assertThat(infos).hasSize(1);
+        PersonInfoDTO infoObama = infos.get(0);
+        assertThat(infoObama.getAge()).isEqualTo(30);
+        assertThat(infoObama.getFirstName()).isEqualTo("Barack");
+        assertThat(infoObama.getLastName()).isEqualTo("obama");
+        assertThat(infoObama.getEmail()).isEqualTo("obama@mohamed.com");
+        assertThat(infoObama.getAddress()).isEqualTo("WhiteHouse");
+        assertThat(infoObama.getAllergies()).isEqualTo(medicalrecordObama.getAllergies());
+        assertThat(infoObama.getMedications()).isEqualTo(medicalrecordObama.getMedications());
     }
 }

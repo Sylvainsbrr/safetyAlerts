@@ -36,9 +36,9 @@ public class MedicalRecordController {
     // Suppression d'un medicalRecord
     @DeleteMapping(path = "medicalRecord")
     @ResponseStatus(HttpStatus.RESET_CONTENT)
-    public void deleteMedicalRecord(@RequestBody @Valid MedicalRecord firestation) {
+    public void deleteMedicalRecord(@RequestBody @Valid MedicalRecord medicalRecord) {
         logger.info("deleteMedicalRecord : appel du controller medicalRecord");
-        medicalRecordService.deleteMedicalRecord(firestation);
+        medicalRecordService.deleteMedicalRecord(medicalRecord);
     }
 
 }
