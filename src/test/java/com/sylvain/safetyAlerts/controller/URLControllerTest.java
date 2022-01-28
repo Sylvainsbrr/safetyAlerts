@@ -39,33 +39,25 @@ public class URLControllerTest {
 
     @Test
     void getCommunityEmail() throws Exception {
-        // given
         List<String> listEmails = List.of("ja@a.com", "b@b.com", "c@C.fr");
-
-        // etape 1 on moque le comportement de ipersonService pour envoyer des valeur
-        // d'email
+        // 1 - Simulation du comportement de IPersonService pour les valeurs d'email
         Mockito.when(iPersonService.getCommunityEmail("Culver")).thenReturn(listEmails);
-
-        // etape2 on envoie une reque GET avec param Culver comme value un 200 isOk()
+        // 2 -  Envoie d'une requete GET avec param Culver comme value un 200 isOk()
         mockMvc.perform(MockMvcRequestBuilders.get("/communityEmail").param("city", "Culver"))
                 .andExpect(MockMvcResultMatchers.status().isOk());
-        // etap 3 on verifie que le serivce a bien été appele avec le bon parametre
-
+        // 3 - Vérification que le service a bien été appele avec le bon parametre
         Mockito.verify(iPersonService, Mockito.times(1)).getCommunityEmail("Culver");
     }
 
     @Test
     void getChildByAddress() throws Exception {
 
-        // Test 1 : on envoie une requête GET avec des parametre
+        // On envoie une requête GET avec des parametres
         // pour verifier si le statut 200 est ok
-
         mockMvc.perform(MockMvcRequestBuilders
-                        .get("/childAlert").param("address", "1509 Culver St"))
+                .get("/childAlert").param("address", "1509 Culver St"))
                 .andExpect(MockMvcResultMatchers.status().isOk());
-
-        // Test 2 : on vérifie que le service a bien été appelé avec les bons
-        // paramètres
+        // Test 2 : on vérifie que le service a bien été appelé avec les bons paramètres
 
         Mockito.verify(iPersonService, Mockito.times(1)).getChildAlert("1509 Culver St");
 
@@ -73,7 +65,8 @@ public class URLControllerTest {
         // non valide
         // + on vérifie que le retour est vide
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/childAlert").param("address", "999 Culver St"))
+        mockMvc.perform(MockMvcRequestBuilders.get("/childAlert")
+                .param("address", "999 Culver St"))
                 .andExpect(MockMvcResultMatchers.content().string("[]"));
 
         // Test 4 : on envoie une requête GET avec en paramètre une adresse
@@ -86,17 +79,9 @@ public class URLControllerTest {
 
     @Test
     void getPersonInfo() throws Exception {
-
-        // Test 1 : on envoie une requête GET avec des parametre
-        // pour verifier si le statut 200 est ok
-
-        mockMvc.perform(
-                        MockMvcRequestBuilders.get("/personInfo").param("lastName", "Boyd").param("firstName", "george"))
+        mockMvc.perform(MockMvcRequestBuilders.get("/personInfo")
+                .param("lastName", "Boyd").param("firstName", "george"))
                 .andExpect(MockMvcResultMatchers.status().isOk());
-
-        // Etape 2 : on vérifie que le service a bien été appelé avec les bons
-        // paramètres
-
         Mockito.verify(iPersonService, Mockito.times(1)).getPersonInfo("george", "Boyd");
     }
 
@@ -105,18 +90,17 @@ public class URLControllerTest {
         mockMvc.perform(MockMvcRequestBuilders
                 .get("/phoneAlert")
                 .param("firestation", "1")
-
         ).andExpect(MockMvcResultMatchers.status().isOk());
 
         Mockito.verify(firestationService, Mockito.times(1)).getPhoneByStation("1");
 
         mockMvc.perform(MockMvcRequestBuilders.get("/phoneAlert")
-                        .param("firestation", "0"))
+                .param("firestation", "0"))
                 .andExpect(MockMvcResultMatchers.content().string("[]"));
     }
 
     @Test
-    void getCoverageByFireStation() throws Exception{
+    void getCoverageByFireStation() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders
                 .get("/firestation")
                 .param("stationNumber", "1")
@@ -134,26 +118,24 @@ public class URLControllerTest {
         // pour verifier si le statut 200 est ok
 
         mockMvc.perform(MockMvcRequestBuilders.get("/flood/stations")
-                        .param("stations", "1", "2"))
+                .param("stations", "1", "2"))
                 .andExpect(MockMvcResultMatchers.status().isOk());
 
         // Test 2 : on vérifie que le service a bien été appelé avec les bons
         // paramètres
 
-        Mockito.verify(firestationService, Mockito.times(1))
-                .getFoyerByFireStation(stations);
+        Mockito.verify(firestationService, Mockito.times(1)).getFoyerByFireStation(stations);
 
         // Test 3 : on envoie une requête GET avec en paramètre une station
         // qui n'existe pas
-        // + on vérifie que le retour est vide
+        // Vérificatioion d'une reponse null
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/flood/stations")
-                        .param("stations", "0"))
+        mockMvc.perform(MockMvcRequestBuilders.get("/flood/stations").param("stations", "0"))
                 .andExpect(MockMvcResultMatchers.content().string("[]"));
     }
 
     @Test
-    void getPersonByAddress() throws Exception{
+    void getPersonByAddress() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders
                 .get("/fire")
                 .param("address", "1509 Culver St")
@@ -163,7 +145,7 @@ public class URLControllerTest {
                 .getPersonByAddress("1509 Culver St");
 
         mockMvc.perform(MockMvcRequestBuilders.get("/fire")
-                        .param("address", "0 rue blabla"))
+                .param("address", "0 rue blabla"))
                 .andExpect(MockMvcResultMatchers.content().string("[]"));
     }
 }

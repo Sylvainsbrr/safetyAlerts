@@ -45,119 +45,108 @@ public class PersonServiceTest {
     @MockBean
     MedicalRecordDao medicalRecordDao;
 
-    Person jill = new Person("jhony", "doe", "add1", "Washinton DC", "12345", "1234", "jhony@mail.com");
-    Person chris = new Person("tom", "poe", "add2", "newyork", "72300", "1435", "tom@mail.com");
-    Person obama = new Person("Barack", "obama", "WhiteHouse", "Washinton DC", "1232111","06755" , "obama@mohamed.com");
+    Person jhony = new Person("jhony", "doe", "add1", "Washinton DC", "12345", "1234", "jhony@mail.com");
+    Person tom = new Person("tom", "poe", "add2", "newyork", "72300", "1435", "tom@mail.com");
+    Person joe = new Person("joe", "tato", "mexico", "juarez", "74000","06755" , "joe@tato.com");
 
     List<String> medication = List.of("lsd,lean");
     List<String> allergies = List.of("polen, girls");
 
-    MedicalRecord medicalrecordObama = new MedicalRecord("Barack", "obama", "03/06/1984", medication, allergies);
+    MedicalRecord medicalrecordJoe = new MedicalRecord("joe", "tato", "03/06/1984", medication, allergies);
 
     String city = "add1";
 
     @Test
     public void createNoneExistingNPersonTest() {
 
-        // Given
+        // Préparation donnees test
         List<Person> persons = new ArrayList<>();
-
         // When
         Mockito.when(dataRepository.getAllPersons()).thenReturn(persons);
-
-        // then
-        Assertions.assertThat(personService.createPerson(chris));
-
-        verify(personDao, Mockito.times(1)).createPerson((chris));
-
+        // Appel de la méthode à tester
+        Assertions.assertThat(personService.createPerson(tom));
+        // Vérifier les données du résultat
+        verify(personDao, Mockito.times(1)).createPerson((tom));
     }
 
     @Test
     public void createExistingNPersonTest() throws Exception {
-
-        // Given
+        // Préparation donnees test
         List<Person> persons = new ArrayList<>();
-        persons.add(chris);
-
+        persons.add(tom);
         // When
         Mockito.when(dataRepository.getAllPersons()).thenReturn(persons);
-
         // then
         try {
-            Assertions.assertThat(personService.createPerson(chris));
+            // Appel de la méthode à tester
+            Assertions.assertThat(personService.createPerson(tom));
             verify(personDao, Mockito.times(0)).createPerson(any());
         } catch (DataAlreadyExistException eExp) {
+            // Vérifier que le message d'exception est le bon
             assert (eExp.getMessage().contains("existe déja"));
         }
-
     }
 
     @Test
     public void updateExistingPersonTest() throws Exception {
-
-        // when
         Mockito.when(personDao.updatePerson(any(Person.class))).thenReturn(true);
-
-        // then
-        Assertions.assertThat(personService.updatePerson(chris));
-
-        verify(personDao, Mockito.times(1)).updatePerson((chris));
-
+        // Appel de la méthode à tester
+        Assertions.assertThat(personService.updatePerson(tom));
+        // Vérifier les données du résultat
+        verify(personDao, Mockito.times(1)).updatePerson((tom));
     }
 
     @Test
     public void updateNoneExistingPersonTest() throws Exception {
-
         // when
         Mockito.when(personDao.updatePerson(any(Person.class))).thenReturn(false);
-
-        // THEN
         // On crée un personne qui existe
         try {
-            Assertions.assertThat(personService.updatePerson(chris));
+            // Appel de la méthode à tester
+            Assertions.assertThat(personService.updatePerson(tom));
+            // Vérifier les données du résultat
             verify(personDao, Mockito.times(1)).updatePerson(any());
         } catch (DataNotFoundException eExp) {
+            // Vérifier que le message d'exception est le bon
             assert (eExp.getMessage().contains("n'existe pas"));
         }
     }
 
     @Test
     public void deleteExistingPersonTest() {
-        // when
         Mockito.when(personDao.deletePerson(any(Person.class))).thenReturn(true);
-        Assertions.assertThat(personService.deletePerson(chris));
-
-        verify(personDao, Mockito.times(1)).deletePerson((chris));
+        Assertions.assertThat(personService.deletePerson(tom));
+        verify(personDao, Mockito.times(1)).deletePerson((tom));
     }
 
     @Test
     public void deleteNoneExistingPersonTest() throws Exception {
-
         Mockito.when(personDao.deletePerson(any(Person.class))).thenReturn(false);
         try {
-            Assertions.assertThat(personService.deletePerson(chris));
+            // Appel de la méthode à tester
+            Assertions.assertThat(personService.deletePerson(tom));
+            // Vérifier les données du résultat
             verify(personDao, Mockito.times(1)).deletePerson(any());
         } catch (DataNotFoundException eExp) {
+            // Vérifier que le message d'exception est le bon
             assert (eExp.getMessage().contains("n'existe pas"));
         }
     }
 
     @Test
     public void getValidCommunityEmailTest() throws Exception {
-
-        // Given
-        Mockito.when(dataRepository.getPersonByCity(city)).thenReturn(List.of(chris, jill));
-        // when
+        Mockito.when(dataRepository.getPersonByCity(city)).thenReturn(List.of(tom, jhony));
+        // Appel de la méthode à tester
         Collection<String> emails = personService.getCommunityEmail(city);
-        // then
-        assertThat(emails).containsExactlyInAnyOrderElementsOf(List.of(chris.getEmail(), jill.getEmail()));
+        // Vérifier les données du résultat
+        assertThat(emails).containsExactlyInAnyOrderElementsOf(List.of(tom.getEmail(), jhony.getEmail()));
     }
 
     @Test
     public void getChildAlertTest() throws Exception {
-        // Préparation du jeu de tests
+        // Préparation donnees test
         List<Person> persons = new ArrayList<Person>();
-        persons.add(chris);
+        persons.add(tom);
         Mockito.when(dataRepository.getPersonByAddress("newyork")).thenReturn(persons);
 
         MedicalRecord medicalRecord = new MedicalRecord();
@@ -182,26 +171,25 @@ public class PersonServiceTest {
         org.junit.jupiter.api.Assertions.assertEquals(childAlertDTO.getFistName(), "tom");
         org.junit.jupiter.api.Assertions.assertEquals(childAlertDTO.getLastName(),"poe");
         org.junit.jupiter.api.Assertions.assertEquals(childAlertDTO.getFamilyMember().size(), 0);
-
     }
 
     @Test
     public void getPersonTest() throws Exception {
-        //Given
-        medicalrecordObama.setBirthdate(LocalDate.now().minusYears(30).format(DateTimeFormatter.ofPattern("MM/dd/yyyy")));
-        Mockito.when(dataRepository.getPersonByLastNameAndFirsName(obama.getLastName(),obama.getFirstName())).thenReturn(List.of(obama));
-        Mockito.when(dataRepository.getMedicalRecordByFirstNameAndLastName(obama.getFirstName(), obama.getLastName())).thenReturn(medicalrecordObama);
-        //when
-        List<PersonInfoDTO> infos = personService.getPersonInfo(obama.getFirstName(), obama.getLastName());
-        //then
+        // Préparation donnees test
+        medicalrecordJoe.setBirthdate(LocalDate.now().minusYears(30).format(DateTimeFormatter.ofPattern("MM/dd/yyyy")));
+        Mockito.when(dataRepository.getPersonByLastNameAndFirsName(joe.getLastName(),joe.getFirstName())).thenReturn(List.of(joe));
+        Mockito.when(dataRepository.getMedicalRecordByFirstNameAndLastName(joe.getFirstName(), joe.getLastName())).thenReturn(medicalrecordJoe);
+        // Appel de la méthode à tester
+        List<PersonInfoDTO> infos = personService.getPersonInfo(joe.getFirstName(), joe.getLastName());
+        // Vérifier les données du résultat
         assertThat(infos).hasSize(1);
         PersonInfoDTO infoObama = infos.get(0);
         assertThat(infoObama.getAge()).isEqualTo(30);
-        assertThat(infoObama.getFirstName()).isEqualTo("Barack");
-        assertThat(infoObama.getLastName()).isEqualTo("obama");
-        assertThat(infoObama.getEmail()).isEqualTo("obama@mohamed.com");
-        assertThat(infoObama.getAddress()).isEqualTo("WhiteHouse");
-        assertThat(infoObama.getAllergies()).isEqualTo(medicalrecordObama.getAllergies());
-        assertThat(infoObama.getMedications()).isEqualTo(medicalrecordObama.getMedications());
+        assertThat(infoObama.getFirstName()).isEqualTo("joe");
+        assertThat(infoObama.getLastName()).isEqualTo("tato");
+        assertThat(infoObama.getEmail()).isEqualTo("joe@tato.com");
+        assertThat(infoObama.getAddress()).isEqualTo("mexico");
+        assertThat(infoObama.getAllergies()).isEqualTo(medicalrecordJoe.getAllergies());
+        assertThat(infoObama.getMedications()).isEqualTo(medicalrecordJoe.getMedications());
     }
 }

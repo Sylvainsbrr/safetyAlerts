@@ -62,20 +62,21 @@ public class MedicalRecordsControllerTest {
         ObjectMapper obm = new ObjectMapper();
         ObjectNode jsonMedicalRecord = obm.createObjectNode();
 
+        // Le firstName est vide
         jsonMedicalRecord.set("firstName", TextNode.valueOf(""));
         jsonMedicalRecord.set("lastName", TextNode.valueOf(lastName));
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/medicalRecord")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(jsonMedicalRecord.toString()))
-                .andExpect(MockMvcResultMatchers.status().isBadRequest());
+        // Donc on s'attend à une requete de type isBadRequest
+        mockMvc.perform(MockMvcRequestBuilders.post("/medicalRecord").contentType(MediaType.APPLICATION_JSON)
+                    .content(jsonMedicalRecord.toString()))
+                    .andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
 
     @Test
     void createMedicalrecordWhenMedicalrecordAlreadyExist() throws Exception {
 
-        // on mock MedicalrecordService et on lui dit de renvoyer l'exception
-        // DataALreadExist
+        // Mock de MedicalrecordService et on lui dit de renvoyer l'exception
+        // DataAlreadExist
         // quand on lui demande de renvoyer un Medicalrecord existant
 
         Mockito.doThrow(DataAlreadyExistException.class).when(medicalrecordService).createMedicalRecord(Mockito.any());
