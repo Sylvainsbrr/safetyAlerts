@@ -52,25 +52,20 @@ public class URLControllerTest {
     @Test
     void getChildByAddress() throws Exception {
 
-        // On envoie une requête GET avec des parametres
-        // pour verifier si le statut 200 est ok
+        // On envoie une requête GET avec des parametres pour verifier si le statut 200 est ok
         mockMvc.perform(MockMvcRequestBuilders
                 .get("/childAlert").param("address", "1509 Culver St"))
                 .andExpect(MockMvcResultMatchers.status().isOk());
         // Test 2 : on vérifie que le service a bien été appelé avec les bons paramètres
-
         Mockito.verify(iPersonService, Mockito.times(1)).getChildAlert("1509 Culver St");
-
-        // Test 3 : on envoie une requête GET avec en paramètre une adresse
-        // non valide
-        // + on vérifie que le retour est vide
+        // Test 3 : on envoie une requête GET avec en paramètre une adresse non valide
+        // on vérifie que le retour est vide
 
         mockMvc.perform(MockMvcRequestBuilders.get("/childAlert")
                 .param("address", "999 Culver St"))
                 .andExpect(MockMvcResultMatchers.content().string("[]"));
 
-        // Test 4 : on envoie une requête GET avec en paramètre une adresse
-        // sans enfants
+        // Test 4 : on envoie une requête GET avec en paramètre une adresse sans enfants
         // + on vérifie que le retour est vide
 
         mockMvc.perform(MockMvcRequestBuilders.get("/childAlert").param("address", "908 73rd St"))
